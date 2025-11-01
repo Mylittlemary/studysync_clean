@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Çalışma Takibi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="{% static 'favicon.ico' %}">
+
+</head>
+<body class="container mt-4">
+
+    <h1 class="mb-4">📚 Günlük Çalışma Takibi</h1>
+
+    <!-- Form -->
+    <h4>Yeni Veri Ekle</h4>
+    <form method="POST" class="mb-4">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-4">{{ form.date.label_tag }} {{ form.date }} {{ form.date.errors }}</div>
+            <div class="col-md-4">{{ form.subject.label_tag }} {{ form.subject }} {{ form.subject.errors }}</div>
+            <div class="col-md-4">{{ form.duration.label_tag }} {{ form.duration }} {{ form.duration.errors }}</div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-4">{{ form.resource.label_tag }} {{ form.resource }} {{ form.resource.errors }}</div>
+            <div class="col-md-4">{{ form.difficulty.label_tag }} {{ form.difficulty }} {{ form.difficulty.errors }}</div>
+            <div class="col-md-4">{{ form.mood.label_tag }} {{ form.mood }}  {{ form.mood.errors }}</div>
+        </div>
+        <div class="mt-2">{{ form.notes.label_tag }} {{ form.notes }} {{ form.notes.errors }}</div>
+        <button type="submit" class="btn btn-primary mt-3">Kaydet</button>
+    </form>
+
+    <hr>
+
+    <!-- Grafikler -->
+    <h4>📈 Günlük Çalışma Süresi</h4>
+    <img src="data:image/png;base64,{{ chart }}" class="img-fluid mb-4"/>
+
+    <h4>😌 Zorluk vs Ruh Hali Analizi</h4>
+    <img src="data:image/png;base64,{{ scatter }}" class="img-fluid mb-4"/>
+
+    <!-- Ek bilgiler -->
+    <div class="alert alert-info">
+        <strong>Haftalık Ortalama:</strong> {{ weekly_average }} dakika<br>
+        <strong>En Verimli Gün:</strong> {{ best_day }}
+    </div>
+
+    <div class="alert alert-success">
+    <strong>Haftalık Hedef:</strong> {{ weekly_goal }} dakika<br>
+    <strong>Gerçekleşen:</strong> {{ weekly_total }} dakika<br>
+    <strong>Durum:</strong> {{ goal_status }}
+</div>
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title">Çalışma Özeti</h5>
+        <p><strong>Toplam süre:</strong>{{weekly_total}} dakika</p>
+        <p><strong>En çok çalışılan konu:</strong>{{most_common_subject}}</p>
+        <p><strong>En çok kullanılan Kaynak:</strong> {{most_common_resource}}</p>
+        <p><strong>Ortalama Zorluk:</strong> {{average_difficulty}}</p>
+        <p><strong>Ortalama Ruh Hali:</strong>{{average_mood}}</p>
+
+
+    </div>
+</div>
+<!-- Kişisel Öneri -->
+    {% if recommendation %}
+    <div class="card mt-4 border-warning">
+        <div class="card-body">
+            <h5 class="card-title">🧠 Kişisel Öneri</h5>
+            <p>{{ recommendation }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Kapanış mesajı -->
+    <div class="text-center mt-5 text-muted">
+        Takipte kal, her gün küçük bir adım büyük fark yaratır 💪
+    </div>
+
+</body>
+</html>
